@@ -1,0 +1,19 @@
+{
+    "drives": [
+        {
+            "NAME": "Drive1",
+            "PARTUUID": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+            "PASSWORD": "password1"
+        },
+        {
+            "NAME": "Drive2",
+            "PARTUUID": "",
+            "PASSWORD": "password2"
+        },
+        {
+            "NAME": "Drive3",
+            "PARTUUID": "",
+            "PASSWORD": "password3"
+        }
+    ]
+}
