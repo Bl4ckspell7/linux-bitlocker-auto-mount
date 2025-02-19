@@ -133,7 +133,6 @@ def main():
     print("===== BitLocker Unlock and Mount Script =====")
     print("Script starting...")
 
-    print("Sudo privileges are required for unlocking and mounting drives:")
     # Request sudo at the start of execution
     try:
         subprocess.run(["sudo", "true"], check=True)
