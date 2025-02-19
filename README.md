@@ -3,70 +3,71 @@
 ## Purpose
 
 This script automatically decrypts and mounts BitLocker-encrypted hard drive partitions on Linux.
-It is especially useful for dual-boot systems where Windows partitions are BitLocker-encrypted and need to be accessed from Linux.
+It is particularly useful for dual-boot systems where Windows partitions are encrypted with BitLocker but need to be accessed from Linux.
+The script supports two methods to unlock BitLocker partitions:
+- **User password** – The standard BitLocker password used for unlocking the drive.
+- **Recovery key** – A 48-digit recovery key, useful if the password is unavailable.
 
 ## Setup
 
-### 1. File Setup
+### **1. File Setup**
 
-1. **Download and Extract:** Download the script's ZIP file, extract it, and place the folder in a location of your choice.
+1. **Download and Extract:**
+   - Download the script's ZIP file.
+   - Extract it and place the folder in a location of your choice.
 
 2. **Update Paths and User Information:**
-   In [`bitlocker-startup.sh`](./bitlocker-startup.sh), replace `SCRIPT_FOLDER_LOCATION` with the full path to the folder where you placed the script.
-   In [`bitlocker-unlock-mount.py`](./bitlocker-unlock-mount.py), replace `YOUR_USERNAME` with your actual Linux username.
+   - In [`bitlocker-startup.sh`](./bitlocker-startup.sh), replace `SCRIPT_FOLDER_LOCATION` with the full path to to the script folder.
+   - In [`bitlocker-unlock-mount.py`](./bitlocker-unlock-mount.py), replace `YOUR_USERNAME` with your actual Linux username.
 
-### 2. Install dependencies
+### **2. Install dependencies**
 
-- **dislocker:** Used to unlock BitLocker-encrypted partitions.
-
+#### **Dislocker (Required to Unlock BitLocker Partitions)**  
 ```bash
 sudo apt install dislocker
 ```
 
-- **Python packages:** Install the necessary Python packages using pip:
-
+#### **Python Packages (Required for Decryption & Input Handling)**  
 ```bash
 pip install cryptography
 pip install getpass_asterisk
 ```
 
-### 3. Fill [`drives.json`](./drives.json) with your data:
+### **3. Configure [`drives.json`](./drives.json)**
 
-For each drive, add a name, PARTUUID and the BitLocker password.
+Create or edit `drives.json` to store your BitLocker partition details.
 
-**How to Find the PARTUUID:**
+Each drive entry must include:  
+- **`NAME`**: A label for the drive (e.g., `"ssd1"`).  
+- **`PARTUUID`**: The unique identifier of the partition.  
+- **`PASSWORD`**: Either the **BitLocker password** or **48-digit recovery key**.
 
-1. Identify your drives (/dev/sdX)
-
+#### **How to Find the `PARTUUID` of Your Partition:**  
+Run the following command:  
 ```bash
-sudo fdisk -l
+lsblk -o NAME,PARTUUID,FSTYPE,MOUNTPOINT
 ```
 
-2. Get the PARTUUID for each drive using:
+### 4. **Encrypt `drives.json`**
 
-```bash
-sudo blkid | grep BitLocker
-```
+Once `drives.json` is ready, encrypt it for security using [`encrypt.py`](./encrypt.py).
 
-### 4. Encrypt `drives.json`
+You will be prompted to enter a **password**, which will be required to decrypt the file later.
 
-Once the `drives.json` is ready, run [`encrypt.py`](./encrypt.py) to encrypt it.
+### 5. Secure `drives.json`
 
-You will be prompted to enter a password, which will be required to decrypt the file later.
+After encrypting `drives.json`, delete the unencrypted version to protect your drive passwords.
+If you may need to edit the drive information later, store an unencrypted backup on an **encrypted partition**. Only the encrypted *drives.json.enc* should be kept for regular use.
 
-### 5. Add the Script to Startup
+However, **if your entire Linux system is already encrypted**, keeping the unencrypted *drives.json* is generally safe.
 
-To ensure the script runs automatically at startup, add the following command to your startup applications:
+### 6. Add the Script to Startup
+
+To ensure the script runs automatically at startup, add the following command to your **startup applications**:
 
 ```bash
 /SCRIPT_FOLDER_LOCATION/bitlocker-startup.sh
 ```
-
-### 6. Secure `drives.json`
-
-After encrypting drives.json, delete the unencrypted version to protect your drive passwords.
-
-If you may need to edit or update the drive information later (e.g., adding more drives or changing BitLocker passwords), store the unencrypted file on an encrypted partition. Only the encrypted `drives.json.enc` should remain accessible for regular use.
 
 ## Usage
 
