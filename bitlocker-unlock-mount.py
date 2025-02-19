@@ -45,7 +45,7 @@ def unlock_drive(drive, partuuid, password, bitlocker_mount_point):
         "-v",
         "-V",
         f"/dev/disk/by-partuuid/{partuuid}",
-        f"-u{password}",
+        f"--user-password={password}",
         "--",
         bitlocker_mount_point,
     ]
