@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+from typing import Optional, Tuple
 
 from getpass_asterisk.getpass_asterisk import getpass_asterisk
 
@@ -12,6 +13,12 @@ USERNAME = "YOUR_USERNAME"
 
 def load_encrypted_json(encrypted_file_path):
     """Load and decrypt the encrypted JSON file."""
+
+    # Check if the file exists
+    if not os.path.exists(encrypted_file_path):
+        print(f"Error: Encrypted file '{encrypted_file_path}' not found.")
+        return None
+
     while True:
         password = getpass_asterisk("Enter the password to decrypt 'drives.json.enc': ")
         try:
@@ -21,26 +28,47 @@ def load_encrypted_json(encrypted_file_path):
             return json.loads(decrypted_json_data.decode("utf-8"))
         except ValueError:
             print("Incorrect password. Please try again.")
+        except json.JSONDecodeError:
+            print("Error: Decrypted data is not valid JSON.")
+            return None
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            return None
 
 
-def prepare_mount_points(drive):
-    """Prepare the directories for mounting the drives."""
-    # Create a separate directory for each drive under /mnt/dislocker/
-    bitlocker_mount_point = f"/mnt/dislocker/{drive}"
-    if not os.path.exists(bitlocker_mount_point):
-        os.makedirs(bitlocker_mount_point)
-        print(f"Created BitLocker mount directory: {bitlocker_mount_point}")
+def prepare_mount_points(drive) -> Tuple[Optional[str], Optional[str]]:
+    """Prepare the directories for mounting the drives.
 
-    # Create the drive-specific mount point if it doesn't exist
-    drive_mount_point = f"/media/{USERNAME}/{drive}"
-    if not os.path.exists(drive_mount_point):
-        os.makedirs(drive_mount_point)
-        print(f"Created mount directory: {drive_mount_point}")
+    Args:
+        drive (str): The name of the drive (e.g., "sda1").
 
-    return bitlocker_mount_point, drive_mount_point
+    Returns:
+        Tuple[Optional[str], Optional[str]]: Paths to the BitLocker mount point
+        and the drive mount point, or (None, None) if an error occurs.
+    """
+    try:
+        # Create a separate directory for each drive under /mnt/dislocker/
+        bitlocker_mount_point = f"/mnt/dislocker/{drive}"
+        if not os.path.exists(bitlocker_mount_point) or not os.listdir(
+            bitlocker_mount_point
+        ):
+            os.makedirs(bitlocker_mount_point, exist_ok=True)
+            print(f"Created BitLocker mount directory: {bitlocker_mount_point}")
+
+        # Create the drive-specific mount point if it doesn't exist or is empty
+        drive_mount_point = f"/media/{USERNAME}/{drive}"
+        if not os.path.exists(drive_mount_point) or not os.listdir(drive_mount_point):
+            os.makedirs(drive_mount_point, exist_ok=True)
+            print(f"Created mount directory: {drive_mount_point}")
+
+        return bitlocker_mount_point, drive_mount_point
+
+    except OSError as e:
+        print(f"Error creating mount directories: {e}")
+        return None, None
 
 
-def unlock_drive(drive, partuuid, password, bitlocker_mount_point):
+def unlock_drive(drive, partuuid, password, bitlocker_mount_point) -> bool:
     """Unlock the BitLocker encrypted drive."""
     dislocker_cmd = [
         "sudo",
@@ -53,10 +81,18 @@ def unlock_drive(drive, partuuid, password, bitlocker_mount_point):
         bitlocker_mount_point,
     ]
     print(f"Unlocking drive {drive}...")
-    subprocess.run(dislocker_cmd)
+    try:
+        result = subprocess.run(
+            dislocker_cmd, check=True, capture_output=True, text=True
+        )
+        print("Drive unlocked successfully.")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"Error unlocking drive: {e.stderr}")
+        return False
 
 
-def mount_drive(bitlocker_mount_point, drive_mount_point):
+def mount_drive(bitlocker_mount_point, drive_mount_point) -> bool:
     """Mount the unlocked drive."""
     mount_cmd = [
         "sudo",
@@ -67,7 +103,13 @@ def mount_drive(bitlocker_mount_point, drive_mount_point):
         drive_mount_point,
     ]
     print(f"Mounting drive to {drive_mount_point}...")
-    subprocess.run(mount_cmd)
+    try:
+        result = subprocess.run(mount_cmd, check=True, capture_output=True, text=True)
+        print("Drive mounted successfully.")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"Error mounting drive: {e.stderr}")
+        return False
 
 
 def main():
@@ -90,6 +132,17 @@ def main():
 
     # Load the decrypted JSON data
     data = load_encrypted_json(json_file_path)
+    if not data:
+        print(
+            "Error: Could not load or decrypt 'drives.json.enc'. Make sure the file exists and the correct password is entered."
+        )
+        return
+
+    total_drives = len(data["drives"])
+    unlocked_count = 0
+    mounted_count = 0
+    failed_unlock = []
+    failed_mount = []
 
     # Iterate over each entry in the JSON and handle unlocking/mounting
     for entry in data["drives"]:
@@ -97,16 +150,50 @@ def main():
         drive_partuuid = entry["PARTUUID"]
         drive_password = entry["PASSWORD"]
 
+        if not all([drive_name, drive_partuuid, drive_password]):
+            print(f"Skipping entry due to missing information: {entry}")
+            continue
+
         # Prepare the mount points
         bitlocker_mount_point, drive_mount_point = prepare_mount_points(drive_name)
+        if bitlocker_mount_point is None or drive_mount_point is None:
+            print(f"Error: Failed to prepare mount points for {drive_name}.")
+            continue
 
         # Unlock the BitLocker encrypted drive
-        unlock_drive(drive_name, drive_partuuid, drive_password, bitlocker_mount_point)
+        if not unlock_drive(
+            drive_name, drive_partuuid, drive_password, bitlocker_mount_point
+        ):
+            print(f"Error: Failed to unlock {drive_name}.")
+            failed_unlock.append(drive_name)
+            continue
+        unlocked_count += 1
 
         # Mount the unlocked drive
-        mount_drive(bitlocker_mount_point, drive_mount_point)
+        if not mount_drive(bitlocker_mount_point, drive_mount_point):
+            print(f"Error: Failed to mount {drive_name}.")
+            failed_mount.append(drive_name)
+            continue
+        mounted_count += 1
 
-        print(f"{drive_name} is unlocked and mounted.")
+        print(f"{drive_name} is successfully unlocked and mounted.")
+
+    # **Final Summary**
+    print("\n===== Summary =====")
+    print(f"Total drives processed: {total_drives}")
+    print(f"Successfully unlocked: {unlocked_count}/{total_drives}")
+    print(f"Successfully mounted: {mounted_count}/{total_drives}")
+
+    if failed_unlock:
+        print(f"Failed to unlock: {', '.join(failed_unlock)}")
+
+    if failed_mount:
+        print(f"Failed to mount (after unlocking): {', '.join(failed_mount)}")
+
+    if unlocked_count == total_drives and mounted_count == total_drives:
+        print("All drives were successfully unlocked and mounted!")
+    else:
+        print("Some drives encountered issues. Please check the errors above.")
 
 
 if __name__ == "__main__":
