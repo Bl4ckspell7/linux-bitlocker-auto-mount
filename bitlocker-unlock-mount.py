@@ -71,6 +71,17 @@ def mount_drive(bitlocker_mount_point, drive_mount_point):
 
 
 def main():
+    print("===== BitLocker Unlock and Mount Script =====")
+    print("Script starting...")
+
+    print("Sudo privileges are required for unlocking and mounting drives:")
+    # Request sudo at the start of execution
+    try:
+        subprocess.run(["sudo", "true"], check=True)
+    except subprocess.CalledProcessError:
+        print("Error: Failed to obtain sudo privileges. Exiting.")
+        raise SystemExit
+
     # Get the path to the current directory where the script is located
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
