@@ -1,7 +1,9 @@
 import json
-import subprocess
 import os
+import subprocess
+
 from getpass_asterisk.getpass_asterisk import getpass_asterisk
+
 from decrypt_utils import decrypt_file
 
 
