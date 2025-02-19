@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import subprocess
 from typing import Optional, Tuple
 
@@ -70,13 +71,24 @@ def prepare_mount_points(drive) -> Tuple[Optional[str], Optional[str]]:
 
 def unlock_drive(drive, partuuid, password, bitlocker_mount_point) -> bool:
     """Unlock the BitLocker encrypted drive."""
+    # Regex pattern for BitLocker recovery key
+    recovery_key_pattern = re.compile(
+        r"^\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}-\d{6}$"
+    )
+
+    # Determine the correct option
+    if recovery_key_pattern.match(password):
+        password_option = f"--recovery-password={password}"
+    else:
+        password_option = f"--user-password={password}"
+
     dislocker_cmd = [
         "sudo",
         "dislocker",
         "-v",
         "-V",
         f"/dev/disk/by-partuuid/{partuuid}",
-        f"--user-password={password}",
+        password_option,
         "--",
         bitlocker_mount_point,
     ]
