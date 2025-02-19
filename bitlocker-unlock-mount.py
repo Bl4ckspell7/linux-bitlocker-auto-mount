@@ -37,6 +37,11 @@ def load_encrypted_json(encrypted_file_path):
             return None
 
 
+def sudo_makedirs(path):
+    """Create a directory with sudo."""
+    subprocess.run(["sudo", "mkdir", "-p", path], check=True)
+
+
 def prepare_mount_points(drive) -> Tuple[Optional[str], Optional[str]]:
     """Prepare the directories for mounting the drives.
 
@@ -53,13 +58,13 @@ def prepare_mount_points(drive) -> Tuple[Optional[str], Optional[str]]:
         if not os.path.exists(bitlocker_mount_point) or not os.listdir(
             bitlocker_mount_point
         ):
-            os.makedirs(bitlocker_mount_point, exist_ok=True)
+            sudo_makedirs(bitlocker_mount_point)
             print(f"Created BitLocker mount directory: {bitlocker_mount_point}")
 
         # Create the drive-specific mount point if it doesn't exist or is empty
         drive_mount_point = f"/media/{USERNAME}/{drive}"
         if not os.path.exists(drive_mount_point) or not os.listdir(drive_mount_point):
-            os.makedirs(drive_mount_point, exist_ok=True)
+            sudo_makedirs(drive_mount_point)
             print(f"Created mount directory: {drive_mount_point}")
 
         return bitlocker_mount_point, drive_mount_point
