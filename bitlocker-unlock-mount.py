@@ -105,7 +105,10 @@ def unlock_drive(drive, partuuid, password, bitlocker_mount_point) -> bool:
         print("Drive unlocked successfully.")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"Error unlocking drive: {e.stderr}")
+        print(f"Error unlocking drive {drive}:")
+        print(f"Return code: {e.returncode}")
+        print(f"Standard output:\n{e.stdout}")
+        print(f"Error output:\n{e.stderr}")
         return False
 
 
@@ -125,7 +128,10 @@ def mount_drive(bitlocker_mount_point, drive_mount_point) -> bool:
         print("Drive mounted successfully.")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"Error mounting drive: {e.stderr}")
+        print(f"Error mounting drive to {drive_mount_point}:")
+        print(f"Return code: {e.returncode}")
+        print(f"Standard output:\n{e.stdout}")
+        print(f"Error output:\n{e.stderr}")
         return False
 
 
