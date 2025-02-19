@@ -68,6 +68,10 @@ To ensure the script runs automatically at startup, add the following command to
 ```bash
 /SCRIPT_FOLDER_LOCATION/bitlocker-startup.sh
 ```
+It is necessary to allow executing the .sh file as a program. To do this, run:
+```bash
+chmod +x /SCRIPT_FOLDER_LOCATION/bitlocker-startup.sh
+```
 
 ## Usage
 
