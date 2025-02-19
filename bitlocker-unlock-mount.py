@@ -6,6 +6,9 @@ from getpass_asterisk.getpass_asterisk import getpass_asterisk
 
 from decrypt_utils import decrypt_file
 
+# Replace with your actual username
+USERNAME = "YOUR_USERNAME"
+
 
 def load_encrypted_json(encrypted_file_path):
     """Load and decrypt the encrypted JSON file."""
@@ -29,7 +32,7 @@ def prepare_mount_points(drive):
         print(f"Created BitLocker mount directory: {bitlocker_mount_point}")
 
     # Create the drive-specific mount point if it doesn't exist
-    drive_mount_point = f"/media/YOUR_USERNAME/{drive}"
+    drive_mount_point = f"/media/{USERNAME}/{drive}"
     if not os.path.exists(drive_mount_point):
         os.makedirs(drive_mount_point)
         print(f"Created mount directory: {drive_mount_point}")
