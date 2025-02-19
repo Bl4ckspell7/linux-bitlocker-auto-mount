@@ -77,3 +77,14 @@ After logging in, a terminal will automatically open, prompting you to:
 2. Enter the password that was used to encrypt `drives.json`.
 
 Once both passwords are entered correctly, the script will decrypt the `drives.json.enc` file and proceed to unlock and mount your BitLocker-encrypted drives.
+
+## **Compatibility**  
+
+This script has been **tested on Ubuntu 22.04**.  
+
+It should work on other **Debian-based** distributions (such as Debian, Linux Mint, and Pop!_OS), but additional testing may be required.  
+
+If you encounter issues on a different distribution, ensure that:  
+- The **dislocker** package is available and correctly installed.  
+- The required **Python packages** are installed (`cryptography`, `getpass_asterisk`).  
+- The mount points and system paths match your Linux setup.  
