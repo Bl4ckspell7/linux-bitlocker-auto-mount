@@ -16,9 +16,8 @@ The script supports two methods to unlock BitLocker partitions:
    - Download the script's ZIP file.
    - Extract it and place the folder in a location of your choice.
 
-2. **Update Paths and User Information:**
+2. **Update Path:**
    - In [`bitlocker-startup.sh`](./bitlocker-startup.sh), replace `SCRIPT_FOLDER_LOCATION` with the full path to to the script folder.
-   - In [`bitlocker-unlock-mount.py`](./bitlocker-unlock-mount.py), replace `YOUR_USERNAME` with your actual Linux username.
 
 ### **2. Install dependencies**
 

@@ -8,8 +8,9 @@ from getpass_asterisk.getpass_asterisk import getpass_asterisk
 
 from decrypt_utils import decrypt_file
 
-# Replace with your actual username
-USERNAME = "YOUR_USERNAME"
+USERNAME = os.getenv("USER") or os.getlogin()
+USER_UID = os.getuid()
+USER_GID = os.getgid()
 
 
 def load_encrypted_json(encrypted_file_path):
@@ -118,7 +119,7 @@ def mount_drive(bitlocker_mount_point, drive_mount_point) -> bool:
         "sudo",
         "mount",
         "-o",
-        "loop,rw",
+        f"loop,rw,uid={USER_UID},gid={USER_GID}",
         f"{bitlocker_mount_point}/dislocker-file",
         drive_mount_point,
     ]
