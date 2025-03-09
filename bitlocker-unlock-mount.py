@@ -91,8 +91,8 @@ def unlock_drive(drive, partuuid, password, bitlocker_mount_point) -> bool:
     dislocker_cmd = [
         "sudo",
         "dislocker",
-        "-v",
-        "-V",
+        "--verbosity",
+        "--volume",
         f"/dev/disk/by-partuuid/{partuuid}",
         password_option,
         "--",
