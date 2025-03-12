@@ -40,7 +40,7 @@ def load_encrypted_json(encrypted_file_path):
 
 def sudo_makedirs(path):
     """Create a directory with sudo."""
-    subprocess.run(["sudo", "mkdir", "-p", path], check=True)
+    subprocess.run(["sudo", "mkdir", "--parents", path], check=True)
 
 
 def prepare_mount_points(drive) -> Tuple[Optional[str], Optional[str]]:
@@ -114,12 +114,15 @@ def unlock_drive(drive, partuuid, password, bitlocker_mount_point) -> bool:
 
 
 def mount_drive(bitlocker_mount_point, drive_mount_point) -> bool:
-    """Mount the unlocked drive."""
+    """
+    Mount the unlocked drive.
+    Set the mount options to allow read/write access for the current user.
+    """
     mount_cmd = [
         "sudo",
         "mount",
-        "-o",
-        f"loop,rw,uid={USER_UID},gid={USER_GID}",
+        "--options",
+        f"loop,rw,uid={USER_UID},gid={USER_GID},umask=0007,dmask=0007,fmask=0007",
         f"{bitlocker_mount_point}/dislocker-file",
         drive_mount_point,
     ]
