@@ -43,7 +43,9 @@ def sudo_makedirs(path):
     subprocess.run(["sudo", "mkdir", "--parents", path], check=True)
 
 
-def prepare_mount_points(drive) -> Tuple[Optional[str], Optional[str]]:
+def prepare_mount_points(
+    drive, uid=USER_UID, gid=USER_GID
+) -> Tuple[Optional[str], Optional[str]]:
     """Prepare the directories for mounting the drives.
 
     Args:
@@ -122,7 +124,7 @@ def mount_drive(bitlocker_mount_point, drive_mount_point) -> bool:
         "sudo",
         "mount",
         "--options",
-        f"loop,rw,uid={USER_UID},gid={USER_GID},umask=0007,dmask=0007,fmask=0007",
+        f"loop,rw,uid={USER_UID},gid={USER_GID},umask=0077,dmask=0077,fmask=0077",
         f"{bitlocker_mount_point}/dislocker-file",
         drive_mount_point,
     ]
