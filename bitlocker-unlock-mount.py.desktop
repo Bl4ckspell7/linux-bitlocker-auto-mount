@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=/SCRIPT_FOLDER_LOCATION/bitlocker-startup.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Bitlocker Unlock
+Name=Bitlocker Unlock
+Comment[en_US]=Auto-unlock Bitlocker encrypted drives via python script
+Comment=Auto-unlock Bitlocker encrypted drives via python script
