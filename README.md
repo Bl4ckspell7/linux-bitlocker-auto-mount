@@ -114,7 +114,7 @@ After logging in, a terminal will automatically open, prompting you to:
 Once both passwords are entered correctly, the script will decrypt the `drives.json.enc` file and proceed to unlock and mount your BitLocker-encrypted drives.
 
 ### **Example Output:**
-<img src="./demo.png" alt="Demo" style="width: 50%;">
+<img src="./demo.png" alt="Demo" style="width: 70%;">
 
 ## **Compatibility**
 
