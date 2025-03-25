@@ -68,10 +68,10 @@ You will be prompted to enter a **password**, which will be required to decrypt 
 
 ### 5. **Secure [`drives.json`](./drives.json)**
 
-After encrypting `drives.json`, delete the unencrypted version to protect your drive passwords.
+After encrypting [`drives.json`](./drives.json), delete the unencrypted version to protect your drive passwords.
 If you may need to edit the drive information later, store an unencrypted backup on an **encrypted partition**. Only the encrypted *drives.json.enc* should be kept for regular use.
 
-However, **if your entire Linux system is already encrypted**, keeping the unencrypted *drives.json* is generally safe.
+However, **if your entire Linux system is already encrypted**, keeping the unencrypted [*`drives.json`*](./drives.json) is generally safe.
 
 ### 6. **Add the Script to Startup**
 
