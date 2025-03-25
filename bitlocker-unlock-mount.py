@@ -170,6 +170,7 @@ def main():
             "Error: Could not load or decrypt 'drives.json.enc'. Make sure the file exists and the correct password is entered."
         )
         return
+    print("")
 
     total_drives = len(data["drives"])
     unlocked_count = 0
@@ -209,10 +210,10 @@ def main():
             continue
         mounted_count += 1
 
-        print(f"{drive_name} is successfully unlocked and mounted.")
+        print(f"{drive_name} is successfully unlocked and mounted.\n")
 
     # **Final Summary**
-    print("\n===== Summary =====")
+    print("===== Summary =====")
     print(f"Total drives processed: {total_drives}")
     print(f"Successfully unlocked: {unlocked_count}/{total_drives}")
     print(f"Successfully mounted: {mounted_count}/{total_drives}")
