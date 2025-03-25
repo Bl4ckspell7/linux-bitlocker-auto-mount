@@ -83,9 +83,7 @@ Once both passwords are entered correctly, the script will decrypt the `drives.j
 
 ## **Compatibility**
 
-This script has been **tested on Ubuntu 22.04**.
-
-It should work on other **Debian-based** distributions (such as Debian, Linux Mint, and Pop!_OS), but additional testing may be required. 
+This script has been tested on **Ubuntu 22.04** and **Debian 13**.
 
 If you encounter issues:
-- Try installing the [dislocker](https://github.com/Aorimn/dislocker) and [ntfs-3g](https://github.com/tuxera/ntfs-3g) packages manually.
+- Try installing the [dislocker](https://github.com/Aorimn/dislocker) and/or [ntfs-3g](https://github.com/tuxera/ntfs-3g) package manually.
