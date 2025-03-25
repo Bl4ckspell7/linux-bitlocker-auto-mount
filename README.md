@@ -116,9 +116,13 @@ Once both passwords are entered correctly, the script will decrypt the `drives.j
 ### **Example Output:**
 <img src="./demo.png" alt="Demo" style="width: 70%;">
 
-## **Compatibility**
+## Compatibility
 
 This script has been tested on **Ubuntu 22.04** and **Debian 13**.
 
 If you encounter issues:
 - Try installing the [dislocker](https://github.com/Aorimn/dislocker) and/or [ntfs-3g](https://github.com/tuxera/ntfs-3g) package manually.
+
+## License
+
+This script is open-source and available under the [MIT License](./LICENSE).
