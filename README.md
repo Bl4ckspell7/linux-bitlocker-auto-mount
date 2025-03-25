@@ -17,19 +17,32 @@ The script supports two methods to unlock BitLocker partitions:
    - Extract it and place the folder in a location of your choice.
 
 2. **Update Path:**
-   - In [`bitlocker-startup.sh`](./bitlocker-startup.sh), replace `SCRIPT_FOLDER_LOCATION` with the full path to to the script folder.
+   - In [`bitlocker-startup.sh`](./bitlocker-startup.sh), replace `SCRIPT_DIRECTORY` with the full path to to the script folder.
 
-### **2. Install dependencies**
+### **2. Install Dependencies**
 
 #### **Dislocker (Required to Unlock BitLocker Partitions)**  
 ```bash
 sudo apt install dislocker
 ```
 
-#### **Python Packages (Required for Decryption & Input Handling)**  
+#### **Python Virtual Environment & Required Packages**  
+
+To ensure proper package isolation, a Python virtual environment is required.
+
+1. **Create a virtual environment:**  
 ```bash
-pip install cryptography
-pip install getpass_asterisk
+python3 -m venv /SCRIPT_DIRECTORY/python3-venv
+```
+
+2. **Activate the virtual environment:**  
+```bash
+source /SCRIPT_DIRECTORY/python3-venv/bin/activate
+```
+
+3. **Install required Python packages:**  
+```bash
+pip install cryptography getpass_asterisk
 ```
 
 ### **3. Configure [`drives.json`](./drives.json)**
@@ -70,6 +83,20 @@ To ensure the script runs automatically at startup, add the following command to
 It is necessary to allow executing the .sh file as a program. To do this, run:
 ```bash
 chmod +x /SCRIPT_FOLDER_LOCATION/bitlocker-startup.sh
+```
+
+### **Manual Execution**
+
+If you want to manually run [`bitlocker-unlock-mount.py`](./bitlocker-unlock-mount.py), follow these steps:
+
+1. **Activate the virtual environment:**  
+```bash
+source /SCRIPT_DIRECTORY/python3-venv/bin/activate
+```
+
+2. **Run the script:**  
+```bash
+python /SCRIPT_DIRECTORY/bitlocker-unlock-mount.py
 ```
 
 ## Usage
