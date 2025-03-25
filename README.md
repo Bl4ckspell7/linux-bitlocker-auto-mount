@@ -109,9 +109,12 @@ python /SCRIPT_DIRECTORY/bitlocker-unlock-mount.py
 After logging in, a terminal will automatically open, prompting you to:
 
 1. Enter your user login password for `sudo` permissions.
-2. Enter the password that was used to encrypt `drives.json`.
+2. Enter the password that was used to encrypt [`drives.json`](./drives.json).
 
 Once both passwords are entered correctly, the script will decrypt the `drives.json.enc` file and proceed to unlock and mount your BitLocker-encrypted drives.
+
+### **Example Output:**
+<img src="./demo.png" alt="Demo" style="width: 50%;">
 
 ## **Compatibility**
 
