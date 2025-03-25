@@ -47,7 +47,7 @@ pip install cryptography getpass_asterisk
 
 ### **3. Configure [`drives.json`](./drives.json)**
 
-Create or edit `drives.json` to store your BitLocker partition details.
+Create or edit [`drives.json`](./drives.json) to store your BitLocker partition details.
 
 Each drive entry must include:  
 - **`NAME`**: A label for the drive (e.g., `"ssd1"`).  
@@ -60,27 +60,32 @@ Run the following command:
 lsblk -o NAME,PARTUUID,FSTYPE,MOUNTPOINT
 ```
 
-### 4. **Encrypt `drives.json`**
+### 4. **Encrypt [`drives.json`](./drives.json)**
 
-Once `drives.json` is ready, encrypt it for security using [`encrypt.py`](./encrypt.py).
+Once [`drives.json`](./drives.json) is ready, encrypt it for security using [`encrypt.py`](./encrypt.py).
 
 You will be prompted to enter a **password**, which will be required to decrypt the file later.
 
-### 5. Secure `drives.json`
+### 5. **Secure [`drives.json`](./drives.json)**
 
 After encrypting `drives.json`, delete the unencrypted version to protect your drive passwords.
 If you may need to edit the drive information later, store an unencrypted backup on an **encrypted partition**. Only the encrypted *drives.json.enc* should be kept for regular use.
 
 However, **if your entire Linux system is already encrypted**, keeping the unencrypted *drives.json* is generally safe.
 
-### 6. Add the Script to Startup
+### 6. **Add the Script to Startup**
 
-To ensure the script runs automatically at startup, add the following command to your **startup applications**:
+To run the script automatically at startup, can either:
 
+1. **Add the startup script to your startup applications manually:**
 ```bash
 /SCRIPT_FOLDER_LOCATION/bitlocker-startup.sh
 ```
-It is necessary to allow executing the .sh file as a program. To do this, run:
+
+2. **Use the included `.desktop` file:**\
+Place the [`bitlocker-unlock-mount.py.desktop`](./bitlocker-unlock-mount.py.desktop) file inside `~/.config/autostart/` to automatically launch the script at startup. Before doing so, modify the `Exec` path in the `.desktop` file to point to the correct location of [`bitlocker-startup.sh`](./bitlocker-startup.sh).
+
+It is necessary to allow executing the `.sh` file as a program. To do this, run:
 ```bash
 chmod +x /SCRIPT_FOLDER_LOCATION/bitlocker-startup.sh
 ```
