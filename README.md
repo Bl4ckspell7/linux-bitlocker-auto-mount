@@ -32,6 +32,9 @@ To ensure proper package isolation, a Python virtual environment is required.
 
 1. **Create a virtual environment:**  
 ```bash
+sudo apt install python3-venv
+```
+```bash
 python3 -m venv /SCRIPT_DIRECTORY/python3-venv
 ```
 
