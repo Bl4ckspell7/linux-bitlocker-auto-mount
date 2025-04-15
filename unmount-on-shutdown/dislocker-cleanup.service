@@ -1,0 +1,12 @@
+[Unit]
+Description=Unmount BitLocker drives
+DefaultDependencies=no
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/SCRIPT_FOLDER_LOCATION/unmount-on-shutdown/unmount_dislocker.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=shutdown.target

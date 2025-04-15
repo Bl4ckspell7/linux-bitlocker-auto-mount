@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=/SCRIPT_FOLDER_LOCATION/bitlocker-startup.sh
+Exec=/SCRIPT_FOLDER_LOCATION/mount-on-startup/bitlocker-startup.sh
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true

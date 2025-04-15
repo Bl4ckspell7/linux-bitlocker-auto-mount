@@ -17,7 +17,7 @@ The script supports two methods to unlock BitLocker partitions:
    - Extract it and place the folder in a location of your choice.
 
 2. **Update Path:**
-   - In [`bitlocker-startup.sh`](./bitlocker-startup.sh), replace `SCRIPT_DIRECTORY` with the full path to to the script folder.
+   - In [`bitlocker-startup.sh`](./mount-on-startup/bitlocker-startup.sh), replace `SCRIPT_DIRECTORY` with the full path to to the script folder.
 
 ### **2. Install Dependencies**
 
@@ -82,18 +82,32 @@ To run the script automatically at startup, can either:
 
 1. **Add the startup script to your startup applications manually:**
 ```bash
-/SCRIPT_FOLDER_LOCATION/bitlocker-startup.sh
+/SCRIPT_FOLDER_LOCATION/mount-on-startup/bitlocker-startup.sh
 ```
 
 2. **Use the included `.desktop` file:**\
-Place the [`bitlocker-unlock-mount.py.desktop`](./bitlocker-unlock-mount.py.desktop) file inside `~/.config/autostart/` to automatically launch the script at startup. Before doing so, modify the `Exec` path in the `.desktop` file to point to the correct location of [`bitlocker-startup.sh`](./bitlocker-startup.sh).
+Place the [`bitlocker-unlock-mount.py.desktop`](./mount-on-startup/bitlocker-unlock-mount.py.desktop) file inside `~/.config/autostart/` to automatically launch the script at startup. Before doing so, modify the `Exec` path in the `.desktop` file to point to the correct location of [`bitlocker-startup.sh`](./mount-on-startup/bitlocker-startup.sh).
 
 It is necessary to allow executing the `.sh` file as a program. To do this, run:
 ```bash
-chmod +x /SCRIPT_FOLDER_LOCATION/bitlocker-startup.sh
+chmod +x /SCRIPT_FOLDER_LOCATION/mount-on-startup/bitlocker-startup.sh
 ```
 
-### **Manual Execution**
+### 7. **Unmount on Shutdown**
+
+```bash
+sudo chmod +x /SCRIPT_FOLDER_LOCATION/unmount-on-shutdown/unmount_dislocker.sh
+```
+
+```bash
+sudo cp /SCRIPT_FOLDER_LOCATION/unmount-on-shutdown/dislocker-cleanup.service /etc/systemd/system/dislocker-cleanup.service
+```
+
+```bash
+sudo systemctl enable dislocker-cleanup.service
+```
+
+## **Manual Execution**
 
 If you want to manually run [`bitlocker-unlock-mount.py`](./bitlocker-unlock-mount.py), follow these steps:
 
