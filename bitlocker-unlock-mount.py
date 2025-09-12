@@ -28,11 +28,11 @@ def load_encrypted_json(encrypted_file_path):
             decrypted_json_data = decrypt_file(password, encrypted_file_path)
             # Parse and return the JSON content if decryption succeeds
             return json.loads(decrypted_json_data.decode("utf-8"))
-        except ValueError:
-            print("Incorrect password. Please try again.")
         except json.JSONDecodeError:
             print("Error: Decrypted data is not valid JSON.")
             return None
+        except ValueError:
+            print("Incorrect password. Please try again.")
         except Exception as e:
             print(f"Unexpected error: {e}")
             return None
