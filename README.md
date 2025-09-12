@@ -93,20 +93,6 @@ It is necessary to allow executing the `.sh` file as a program. To do this, run:
 chmod +x /SCRIPT_FOLDER_LOCATION/mount-on-startup/bitlocker-startup.sh
 ```
 
-### 7. **Unmount on Shutdown**
-
-```bash
-sudo chmod +x /SCRIPT_FOLDER_LOCATION/unmount-on-shutdown/unmount_dislocker.sh
-```
-
-```bash
-sudo cp /SCRIPT_FOLDER_LOCATION/unmount-on-shutdown/dislocker-cleanup.service /etc/systemd/system/dislocker-cleanup.service
-```
-
-```bash
-sudo systemctl enable dislocker-cleanup.service
-```
-
 ## **Manual Execution**
 
 If you want to manually run [`bitlocker-unlock-mount.py`](./bitlocker-unlock-mount.py), follow these steps:
