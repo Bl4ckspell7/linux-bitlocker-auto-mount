@@ -8,9 +8,23 @@ from getpass_asterisk.getpass_asterisk import getpass_asterisk
 
 from decrypt_utils import decrypt_file
 
+
 USERNAME = os.getenv("USER") or os.getlogin()
 USER_UID = os.getuid()
 USER_GID = os.getgid()
+
+
+def prompt_password() -> str:
+    """Prompt user for a non-empty password."""
+    while True:
+        try:
+            password: str = getpass_asterisk(
+                "Enter the password to decrypt 'drives.json.enc': "
+            )
+        except EOFError:
+            print("\nError: Password cannot be empty. Please try again.")
+            continue
+        return password
 
 
 def load_encrypted_json(encrypted_file_path):
@@ -22,7 +36,7 @@ def load_encrypted_json(encrypted_file_path):
         return None
 
     while True:
-        password = getpass_asterisk("Enter the password to decrypt 'drives.json.enc': ")
+        password: str = prompt_password()
         try:
             # Attempt to decrypt the file
             decrypted_json_data = decrypt_file(password, encrypted_file_path)
