@@ -39,7 +39,23 @@ def encrypt_file(password: str, file_path: str, output_path: str):
         file.write(salt + encrypted_data)
 
 
-# Example: Encrypt the "drives.json" file
-password = getpass_asterisk("Enter a password to encrypt the file: ")
-encrypt_file(password, "drives.json", "drives.json.enc")
-print("File encrypted and saved as 'drives.json.enc'")
+def prompt_password() -> str:
+    """Prompt user for a non-empty password."""
+    while True:
+        try:
+            password: str = getpass_asterisk("Enter a password to encrypt the file: ")
+        except EOFError:
+            print("\nError: Password cannot be empty. Please try again.")
+            continue
+        return password
+
+
+def main() -> None:
+    """Main entry point for encrypting drives.json with a user-provided password."""
+    password: str = prompt_password()
+    encrypt_file(password, "drives.json", "drives.json.enc")
+    print("File encrypted and saved as 'drives.json.enc'")
+
+
+if __name__ == "__main__":
+    main()
