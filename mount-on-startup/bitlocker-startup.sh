@@ -10,4 +10,5 @@ exec bash"
 # Choose your terminal
 # ────────────────────
 CMD="$CMD" gnome-terminal -- bash -c 'eval "$CMD"'
+# CMD="$CMD" ptyxis -- bash -c 'eval "$CMD"'
 # CMD="$CMD" blackbox-terminal -e bash -c 'eval "$CMD"'
